@@ -37,18 +37,49 @@ def simple_calculator(operation: str, num1: float, num2: float) -> float:
     else:
         raise ValueError("Invalid operation. Please choose from 'add', 'subtract', 'multiply', or 'divide'.")
 
+def request_sanitized_number(prompt: str) -> float:
+    """
+    Function to request and sanitize user input for the operation.
+
+    Returns:
+        float: The sanitized numeric input by the user.
+    """
+    while True:
+        try:
+            number = float(input(prompt))
+            return number
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+def request_sanitized_operation(prompt: str) -> str:
+    """
+    Function to request and sanitize user input for the operation.
+    Repeats until valid operation is inputted.
+    """
+    operations = ['add', 'subtract', 'multiply', 'divide']
+    while True:
+        user_input = input(prompt).strip().lower()
+        if user_input in operations:
+            return user_input
+        else:
+            print(f"Invalid operation '{user_input}'. Please choose from: {', '.join(operations)}.")
+
+
 def main():
     
     print(f"===== Simple Calculator =====")
 
     # Ask the user for sample input    
-    num1 = float(input("Enter the first number: "))
-    num2 = float(input("Enter the second number: "))
-    operation = input("Enter the operation (add, subtract, multiply, divide): ").strip().lower()
+    num1 = request_sanitized_number("Enter the first number: ")
+    num2 = request_sanitized_number("Enter the second number: ")
+    operation = request_sanitized_operation("Enter the operation (add, subtract, multiply, divide): ").strip().lower()
 
     # Perform the calculation and display the result
-    result = simple_calculator(operation, num1, num2)
-    print(f"The result of {operation}ing {num1} and {num2} is: {result}")
+    if operation == "divide" and num2 == 0:
+        print("Division by zero is not allowed.")
+    else:
+        result = simple_calculator(operation, num1, num2)
+        print(f"The result of {operation}ing {num1} and {num2} is: {result}")
 
 
 if __name__ == "__main__":
